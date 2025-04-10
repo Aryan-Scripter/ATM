@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int atm(int, int*);
 int compareAccount(char *,int);
+void printMenu();
+void clearScreen();
+
+void clearScreen() {
+	system("cls");
+}
 
 struct account {
 	char user[30];
@@ -19,7 +26,12 @@ struct account accounts[7]= {
 	{"Gaurav Kumar",000,10000}
 };
 
+typedef struct {
+	char user[30];
+	int pass;
+} login;
 
+login loginAuth();
 
 
 int atm(int wid, int *balance) {
@@ -73,10 +85,10 @@ int atm(int wid, int *balance) {
 	printf("The amount of 100 notes withdrawn=%d \n",count1);
 	printf("The amount of 50 notes withdrawn=%d \n",count50);
 	
-
+	return 0;
 }
 
-int compareAccount(char username[50],int password) {
+int compareAccount(char username[30],int password) {
 
 	int i,bal=0,flag=0;
 
@@ -93,30 +105,81 @@ int compareAccount(char username[50],int password) {
 
 }
 
+void printMenu() {
+	printf("Menu:- \n");
+	printf("1. Check balance\n");
+	printf("2. Withdraw Money\n");
+	printf("3. Login to another account\n");
+	printf("4. Exit ATM\n");
+}
+
+login loginAuth() {
+    login log;
+
+	printf("\nEnter user: ");
+	fgets(log.user, 30, stdin);
+	log.user[strcspn(log.user,"\n")] = '\0';
+
+	printf("Enter password: ");
+	scanf("%d",&log.pass);
+
+    // // Use strncpy to safely copy the string into the structure's array.
+    // strncpy(log.user, user, sizeof(log.user) - 1);
+    // // Ensure the string is null-terminated.
+    // log.user[sizeof(log.user) - 1] = '\0';
+
+    // // Assign the password.
+    // log.pass = pass;
+
+    // // Return the structure.
+    return log;
+}
+
 
 
 int main() {
 
-	int wid=5000,index,pass;
-	char username[50];
+	int index,menu=0;
+	login data;
 
-	printf("Enter user: ");
-	fgets(username, 50, stdin);
-	username[strcspn(username,"\n")] = '\0';
 
-	printf("Enter password: ");
-	scanf("%d",&pass);
+	while(1) {
+		printf("Welcome to ATM\n");
+		data=loginAuth();
+	    index=compareAccount(data.user,data.pass);
+		if(index==-1) {
+			printf("Invalid user or password!");
+			return 0;
+		}
 
-	index=compareAccount(username,pass);
+		while(1) {
+			printMenu();
+			scanf("%d",&menu);
+			if(menu>4 || menu<1) {
+				printf("wrong option\n"); 
+				continue;
+			}
+		
+			switch(menu) {
+				case 1:
+
+				case 2:
+				case 3:
+				case 4:
+				break;
+		}
+
+	}
+}
+	
 	// printf("%d\n",accounts[index].balance);
     // printf("IT WORKED");
 
-	if(index==-1) {
-		printf("Invalid user or password!");
-		return 0;
-	}
-	atm(wid,&accounts[index].balance);
-	printf("Remaining balance %d \n",accounts[index].balance);
+	
+	//printf("%d",accounts[index].balance);
+	
+	// atm(wid,&accounts[index].balance);
+	// printf("Remaining balance %d \n",accounts[index].balance);
     
 	return 0;
 }
