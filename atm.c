@@ -71,7 +71,7 @@ int atm(int wid, int *balance) {
 			count1++;
 			HUNDRED--;
 		}
-			else if(wid>=50 && FIFTY>0) {
+		else if(wid>=50 && FIFTY>0) {
 			wid-=50;
 			count50++;
 			FIFTY--;
@@ -116,6 +116,8 @@ void printMenu() {
 login loginAuth() {
     login log;
 
+	
+
 	printf("\nEnter user: ");
 	fgets(log.user, 30, stdin);
 	log.user[strcspn(log.user,"\n")] = '\0';
@@ -139,7 +141,7 @@ login loginAuth() {
 
 int main() {
 
-	int index,menu=0;
+	int index,menu=0,wid=0;
 	login data;
 
 
@@ -155,6 +157,10 @@ int main() {
 		while(1) {
 			printMenu();
 			scanf("%d",&menu);
+
+			while ((getchar()) != '\n')
+			; // flush the newline
+
 			if(menu>4 || menu<1) {
 				printf("wrong option\n"); 
 				continue;
@@ -162,11 +168,20 @@ int main() {
 		
 			switch(menu) {
 				case 1:
-
+					printf("%d\n",accounts[index].balance);
+					break;
 				case 2:
+					printf("Enter Withdrawal Amount\n");
+					scanf("%d",&wid);
+					atm(wid,&accounts[index].balance);
+					break;
 				case 3:
+					data = loginAuth();
+					index = compareAccount(data.user,data.pass);
+					printf("Successfully Logged into another Account\n");
+					break;
 				case 4:
-				break;
+					exit(0);
 		}
 
 	}
